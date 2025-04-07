@@ -15,8 +15,6 @@ public class TwoDListPQ implements PriorityQueue{
         }
 
         queue.get((int) key).add(value);
-
-        System.out.println(queue.getFirst());
         this.length++;
     }
 
@@ -40,11 +38,7 @@ public class TwoDListPQ implements PriorityQueue{
     }
 
     public boolean empty() {
-        for (ArrayList list : queue) {
-            if (!list.isEmpty()) return false;
-        }
-
-        return true;
+        return this.length == 0;
     }
 
     public int size() {

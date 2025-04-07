@@ -1,21 +1,49 @@
-public class TreeHeapPQ implements PriorityQueue{
-    public void add(Comparable key, Comparable value) {
+import java.util.Arrays;
 
+public class TreeHeapPQ implements PriorityQueue{
+    private BinaryNode<Comparable[]> root;
+    private int length;
+
+    public TreeHeapPQ() {
+        this.root = null;
+        this.length = 0;
+    }
+
+
+    public void add(Comparable key, Comparable value) {
+        Comparable[] data = new Comparable[]{key, value};
+
+        if (this.root == null) {
+            this.root = new BinaryNode<Comparable[]>(data);
+
+            this.length++;
+        } else {
+
+        }
     }
 
     public Comparable[] removeMin() {
-        return new Comparable[0];
+        return null;
     }
 
     public Comparable[] min() {
-        return new Comparable[0];
+        return root.getElement();
     }
 
     public boolean empty() {
-        return false;
+        return this.length == 0;
     }
 
     public int size() {
-        return 0;
+        return this.length;
+    }
+
+    public static void main(String[] args) {
+        TreeHeapPQ e = new TreeHeapPQ();
+        e.add(0, "idk do this");
+
+        System.out.println(Arrays.toString(e.min()));
+
+        System.out.println(Math.ceil(Math.log(12)/Math.log(2)));
     }
 }
