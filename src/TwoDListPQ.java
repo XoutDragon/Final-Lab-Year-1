@@ -48,5 +48,9 @@ public class TwoDListPQ implements PriorityQueue{
     public static void main(String[] args) {
         TwoDListPQ e = new TwoDListPQ();
         e.add(1, "2");
+        e.add(1, "2");
+        e.add(1, "2");
+        e.add(2, "2");
+
     }
 }

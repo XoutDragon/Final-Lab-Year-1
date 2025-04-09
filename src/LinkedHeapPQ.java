@@ -1,6 +1,6 @@
 public class LinkedHeapPQ implements PriorityQueue{
-    private DoubleNode<Comparable> head;
-    private DoubleNode<Comparable> tail;
+    private DoubleNode<Comparable[]> head;
+    private DoubleNode<Comparable[]> tail;
 
     private int length;
 
@@ -14,15 +14,30 @@ public class LinkedHeapPQ implements PriorityQueue{
 
         Comparable[] data = {key, value};
 
+        this.length++;
+
         if (this.head == null) {
-            this.head = new DoubleNode(data, null, null);
+            this.head = new DoubleNode<Comparable[]>(data, null, null);
             this.tail = head;
         } else {
-            this.tail.setNext(new DoubleNode(data, this.tail, null));
+            this.tail.setNext(new DoubleNode<Comparable[]>(data, this.tail, null));
             this.tail = this.tail.getNext();
+
+
+        }
+    }
+
+    private DoubleNode<Comparable[]> getParent(DoubleNode<Comparable[]> child, int index) {
+        if (index <= 0) return null;
+
+        int parentIndex = (index - 1) >>> 1;
+        DoubleNode<Comparable[]> parent = this.head;
+
+        for (int i = 0; i < parentIndex; i++) {
+            parent = parent.getNext();
         }
 
-        this.length++;
+        return parent;
     }
 
     public Comparable[] removeMin() {
@@ -30,14 +45,19 @@ public class LinkedHeapPQ implements PriorityQueue{
     }
 
     public Comparable[] min() {
-        return new Comparable[0];
+        return head.getElement();
     }
 
     public boolean empty() {
-        return false;
+        return this.length == 0;
     }
 
     public int size() {
         return this.length;
     }
+
+    public static void main(String[] args) {
+        System.out.println((7 - 1) >>> 1);
+    }
+
 }
