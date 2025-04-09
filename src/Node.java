@@ -7,15 +7,25 @@ public class Node<T>
 {
 	private T element;
 	private Node<T> nextNode;
+	private Comparable key;
 
 	// ----------------------------------- CONSTRUCTORS -----------------------------------
 	/*
-     * Constructor. Creates a node with an element and a next node.
+     * Constructor. Creates a node with an element and a next node and a key.
 	 */
-	public Node(T element, Node<T> next)
+	public Node(T element, Node<T> next, Comparable key)
 	{
 		this.element = element;
 		this.nextNode = next;
+		this.key = key;
+	}
+
+	/*
+	 * Constructor. Creates a node with an element and a next node.
+	 */
+
+	public Node(T element, Node<T> next) {
+		this(element, next, null);
 	}
 	
 	/*
@@ -24,7 +34,7 @@ public class Node<T>
 	@SuppressWarnings("unchecked")
 	public Node(T element)
 	{
-		this(element, null);
+		this(element, null, null);
 	}
 	
 	/*
@@ -33,7 +43,7 @@ public class Node<T>
 	@SuppressWarnings("unchecked")
 	public Node(Node<T> next)
 	{
-		this(null, next);
+		this(null, next, null);
 	}
 	
 	/*
@@ -41,10 +51,10 @@ public class Node<T>
 	 */
 	public Node()
 	{
-		this(null, null);
+		this(null, null, null);
 	}
-	
-	
+
+
 	// --------------------------------- ACCESSOR METHODS ---------------------------------
 	/*
      * Returns the data element contained within this node as the type of the generic
@@ -54,6 +64,12 @@ public class Node<T>
 	{
 		return this.element;
 	}
+
+	/*
+	 * Returns the key of the node
+	 */
+
+	public Comparable getKey() { return this.key; };
 	
 	/*
      * Returns a reference to the next node.

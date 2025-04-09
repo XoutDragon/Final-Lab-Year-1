@@ -20,9 +20,28 @@ public class LinkedHeapPQ implements PriorityQueue{
             this.head = new DoubleNode<Comparable[]>(data, null, null);
             this.tail = head;
         } else {
+
+            // Insert to end of array
+
             this.tail.setNext(new DoubleNode<Comparable[]>(data, this.tail, null));
             this.tail = this.tail.getNext();
 
+            // upheap
+
+            boolean finishedUpheaping = false;
+
+            DoubleNode<Comparable[]> prev = this.tail;
+            int prevIndex = this.length;
+            DoubleNode<Comparable[]> curr = getParent(prev, prevIndex);
+
+
+            while (!finishedUpheaping) {
+                if (prev.getElement()[0].compareTo(curr.getElement()[0]) >= 0) {
+                    finishedUpheaping = true;
+                }
+
+
+            }
 
         }
     }

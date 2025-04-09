@@ -22,7 +22,7 @@ public class TreeHeapPQ implements PriorityQueue{
             this.length++;
         } else {
             BinaryNode<Comparable[]> node = new BinaryNode<Comparable[]>(data);
-            _insertion(this.root, node, 1, _log2(this.length-1));
+            _insertion(this.root, node, 1, _log2(this.length)-1);
 
 //            while (node.getParent() != null) {
 //
