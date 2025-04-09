@@ -54,6 +54,8 @@ public class LinkedLinkedPQ implements PriorityQueue {
 
         Comparable[] data = new Comparable[]{this.head.getKey(), (Comparable) this.head.getElement().getElement()};
 
+        this.head = new Node<Node>(this.head.getElement().getNext(), this.head.getNext(), this.head.getKey());
+
         if (this.head.getElement() == null) {
             this.head = this.head.getNext();
         }
@@ -107,8 +109,39 @@ public class LinkedLinkedPQ implements PriorityQueue {
     public static void main(String[] args) {
         LinkedLinkedPQ pq = new LinkedLinkedPQ();
 
+        Node<Node> root = new Node(new Node("Hi"), null, 0);
+        root.setNext(new Node(new Node("bye"), null, 1));
+
+        root.getElement().setNext(new Node("uwu"));
+
+        Node innerNode = root.getElement();
+
+        root = new Node(root.getElement().getNext(), root.getNext(), root.getKey());
+
+        StringBuilder sb = new StringBuilder();
+        Node<Node> outer = root;
+
+        while (outer != null) {
+            sb.append("Key: ").append(outer.getKey()).append(" → [");
+
+            Node inner = outer.getElement();
+            while (inner != null) {
+                sb.append(inner.getElement());
+                if (inner.getNext() != null) {
+                    sb.append(", ");
+                }
+                inner = inner.getNext();
+            }
+
+            sb.append("]\n");
+            outer = outer.getNext();
+        }
+
+        System.out.println(sb);
+
+
         pq.add(1, "2");
-        System.out.println(pq.removeMin()[0] + "" + pq.removeMin()[1]);
+
 
         System.out.println(pq.stringify());
     }
