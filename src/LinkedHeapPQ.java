@@ -1,70 +1,74 @@
-public class LinkedHeapPQ implements PriorityQueue{
+import java.util.Arrays;
+
+public class LinkedHeapPQ implements PriorityQueue {
     private DoubleNode<Comparable[]> head;
     private DoubleNode<Comparable[]> tail;
-
     private int length;
 
     public LinkedHeapPQ() {
-        head = null;
-        tail = null;
-        length = 0;
+        this.head = null;
+        this.tail = null;
+        this.length = 0;
     }
 
-    public void add(Comparable key, Comparable value) {
 
+    public void add(Comparable key, Comparable value) {
         Comparable[] data = {key, value};
 
         this.length++;
 
         if (this.head == null) {
-            this.head = new DoubleNode<Comparable[]>(data, null, null);
+            this.head = new DoubleNode(data);
             this.tail = head;
         } else {
-
-            // Insert to end of array
-
-            this.tail.setNext(new DoubleNode<Comparable[]>(data, this.tail, null));
+            this.tail.setNext(new DoubleNode(data, this.tail, null));
             this.tail = this.tail.getNext();
 
-            // upheap
+            // upheap here
+            _upheap();
+        }
+    }
 
-            boolean finishedUpheaping = false;
+    private void _upheap() {
+        int index = this.length - 1;
 
-            DoubleNode<Comparable[]> prev = this.tail;
-            int prevIndex = this.length;
-            DoubleNode<Comparable[]> curr = getParent(prev, prevIndex);
+        DoubleNode<Comparable[]> newNode = this.tail;
 
+        while (index > 0) {
+            DoubleNode<Comparable[]> currNode = this.head;
+            int parentIndex = (index - 1) >>> 1;
 
-            while (!finishedUpheaping) {
-                if (prev.getElement()[0].compareTo(curr.getElement()[0]) >= 0) {
-                    finishedUpheaping = true;
-                }
-
-
+            for (int i = 1; i < parentIndex; i++) {
+                currNode = currNode.getNext();
             }
 
+            if (currNode.getElement()[0].compareTo(newNode.getElement()[0]) >= 0) {
+                break;
+            }
+
+            System.out.println("Need Swap");
+
+            DoubleNode<Comparable[]> tempNode =
+                    new DoubleNode<Comparable[]>(null, newNode.getPrevious(), newNode.getNext());
+
+            newNode.setPrevious(currNode.getPrevious());
+            newNode.setNext(currNode.getNext());
+
+            currNode.setNext(tempNode.getNext());
+            currNode.setPrevious(tempNode.getPrevious());
+
+            index = parentIndex;
         }
     }
 
-    private DoubleNode<Comparable[]> getParent(DoubleNode<Comparable[]> child, int index) {
-        if (index <= 0) return null;
 
-        int parentIndex = (index - 1) >>> 1;
-        DoubleNode<Comparable[]> parent = this.head;
-
-        for (int i = 0; i < parentIndex; i++) {
-            parent = parent.getNext();
-        }
-
-        return parent;
-    }
 
     public Comparable[] removeMin() {
         return new Comparable[0];
     }
 
     public Comparable[] min() {
-        return head.getElement();
+        return this.head.getElement();
     }
 
     public boolean empty() {
@@ -75,8 +79,23 @@ public class LinkedHeapPQ implements PriorityQueue{
         return this.length;
     }
 
-    public static void main(String[] args) {
-        System.out.println((7 - 1) >>> 1);
+    public void traverse() {
+        DoubleNode<Comparable[]> current = this.head;
+        while (current != null) {
+            Comparable[] data = current.getElement();
+            System.out.println("Key: " + data[0] + ", Value: " + data[1]);
+            current = current.getNext();
+        }
     }
 
+    public static void main(String[] args) {
+        LinkedHeapPQ pq = new LinkedHeapPQ();
+
+        pq.add('1', 2);
+        pq.add('1', 4);
+        pq.add('5', 1241);
+        pq.add('3', 5);
+
+        pq.traverse();
+    }
 }
