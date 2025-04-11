@@ -34,12 +34,8 @@ public class LinkedHeapPQ implements PriorityQueue {
         DoubleNode<Comparable[]> child = this.tail;
 
         while (index > 0) {
-            DoubleNode<Comparable[]> parent = this.head;
             int parentIndex = (index - 1) >>> 1;
-
-            for (int i = 0; i < parentIndex; i++) {
-                parent = parent.getNext();
-            }
+            DoubleNode<Comparable[]> parent = _getNode(parentIndex);
 
             Comparable parentPrio = parent.getElement()[0];
             Comparable childPrio = child.getElement()[0];
@@ -54,6 +50,12 @@ public class LinkedHeapPQ implements PriorityQueue {
 
 
     private void _swap(DoubleNode parent, DoubleNode child) {
+        if (parent.getPrevious() == null && parent.getNext() == null) {
+            this.head = null;
+            this.tail = null;
+            return;
+        }
+
         DoubleNode parentPrev = parent.getPrevious();
         DoubleNode parentNext = parent.getNext();
 
@@ -106,8 +108,10 @@ public class LinkedHeapPQ implements PriorityQueue {
 
         _swap(this.head, this.tail);
 
-        this.tail = this.tail.getPrevious();
-        this.tail.setNext(null);
+        if (this.tail != null) {
+            this.tail = this.tail.getPrevious();
+            this.tail.setNext(null);
+        }
         this.length--;
 
         _downheap();
@@ -119,60 +123,47 @@ public class LinkedHeapPQ implements PriorityQueue {
         DoubleNode<Comparable[]> parent = this.head;
 
         int index = 0;
-        int leftChildIndex = (index << 1) + 1;
-        System.out.println("leftChildIndex = " + leftChildIndex);
-        int rightChildIndex = (index << 1) + 2;
-        System.out.println("rightChildIndex = " + rightChildIndex);
-
         while (index < this.length) {
-            DoubleNode<Comparable[]> leftChild = this.head;
-            DoubleNode<Comparable[]> rightChild = this.head;
+            int leftChildIndex = (index << 1) + 1;
+            int rightChildIndex = (index << 1) + 2;
 
-            if (leftChildIndex < this.length) {
-                for (int i = 0; i < leftChildIndex; i++)
-                    leftChild = leftChild.getNext();
-            }
-            else {
-                leftChild = null;
-            }
+            DoubleNode<Comparable[]> leftChild = _getNode(leftChildIndex);
+            DoubleNode<Comparable[]> rightChild = _getNode(rightChildIndex);
 
-            if (rightChildIndex < this.length) {
-                for (int i = 0; i < rightChildIndex; i++)
-                    rightChild = rightChild.getNext();
-            } else {
-                rightChild =  null;
-            }
-
-            Comparable leftChildPrio = leftChild != null ? leftChild.getElement()[0] : null;
-            System.out.println("leftChildPrio = " + leftChildPrio);
-            Comparable rightChildPrio = rightChild != null ? rightChild.getElement()[0] : null;
-            System.out.println("rightChildPrio = " + rightChildPrio);
             Comparable parentPrio = parent.getElement()[0];
-            System.out.println("parentPrio = " + parentPrio);
 
-            if ((leftChild != null && rightChild == null) || leftChildPrio.compareTo(rightChildPrio) <= 0) {
-                if (parentPrio.compareTo(leftChildPrio) <= 0) {
-                    break;
-                }
+            DoubleNode<Comparable[]> smallerNode;
 
-                _swap(parent, leftChild);
-
+            if (leftChild == null && rightChild == null) break;
+            else if (leftChild != null && rightChild != null) {
+                Comparable leftPrio = leftChild.getElement()[0];
+                Comparable rightPrio = rightChild.getElement()[0];
+                smallerNode = (leftPrio.compareTo(rightPrio) <= 0) ? leftChild : rightChild;
+                index = (leftPrio.compareTo(rightPrio) <= 0) ? leftChildIndex : rightChildIndex;
+            } else if (leftChild != null) {
+                smallerNode = leftChild;
                 index = leftChildIndex;
-            } else if ((leftChild == null && rightChild != null) || leftChildPrio.compareTo(rightChildPrio) > 0){
-                System.out.println("Does this run");
-                if (parentPrio.compareTo(rightChildPrio) <= 0) {
-                    break;
-                }
-
-                _swap(parent, rightChild);
-
-                index = rightChildIndex;
             } else {
-                break;
+                smallerNode = rightChild;
+                index = rightChildIndex;
             }
+            Comparable childPrio = smallerNode.getElement()[0];
+
+            if (parentPrio.compareTo(childPrio) <= 0) break;
+
+            _swap(parent, smallerNode);
+        }
+    }
+
+    private DoubleNode<Comparable[]> _getNode(int index) {
+        if (index >= this.length) return null;
+        DoubleNode node = this.head;
+
+        for (int i = 0; i < index; i++) {
+            node = node.getNext();
         }
 
-
+        return node;
     }
 
     public Comparable[] min() {
@@ -187,18 +178,6 @@ public class LinkedHeapPQ implements PriorityQueue {
         return this.length;
     }
 
-    public void traverse() {
-        DoubleNode<Comparable[]> current = this.head;
-        int count = 0;
-
-        while (current != null) {
-            Comparable[] data = current.getElement();
-            System.out.println("Key: " + data[0] + ", Value: " + data[1] + ", Index: " + count);
-            current = current.getNext();
-            count++;
-        }
-        System.out.println('\n');
-    }
 
     public static void main(String[] args) {
 
@@ -212,9 +191,7 @@ public class LinkedHeapPQ implements PriorityQueue {
         pq.add(Integer.valueOf(123), "Last");
         pq.add(Integer.valueOf(-5), "Weird, right?");
         pq.add(Integer.valueOf(0), "Should be first");
-        pq.traverse();
 
         pq.removeMin();
-        pq.traverse();
     }
 }
