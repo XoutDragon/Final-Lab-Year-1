@@ -159,8 +159,6 @@ public class LinkedHeapPQTester
 		System.out.println("min:      {-15, ¡Top!}\t\t= " + LinkedHeapPQTester.arrayToString(pq.min()));
 		System.out.println();
 
-		( (LinkedHeapPQ) pq).traverse();
-
 		if(pause)
 			input = keyboard.nextLine();
 		else
