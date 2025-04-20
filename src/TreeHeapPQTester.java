@@ -33,7 +33,7 @@ public class TreeHeapPQTester
 		System.out.println("------------------------------------------------------------");
 
 		PriorityQueue pq = new TreeHeapPQ();
-		boolean pause = true;
+		boolean pause = false;
 
 		System.out.println("size:     0\t= " + pq.size());
 		System.out.println("empty:    true\t= " + pq.empty());
